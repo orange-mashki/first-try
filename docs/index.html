@@ -109,22 +109,37 @@
 
     <footer>© 2025 Estonian Grammar Explainer (demo)</footer>
 
-    <script>
-      function explainGrammar() {
-        const input = document.getElementById("inputText").value.trim();
-        const output = document.getElementById("output");
+  <script>
+async function explainGrammar() {
+  const input = document.getElementById("inputText").value.trim();
+  const output = document.getElementById("output");
 
-        if (!input) {
-          output.textContent = "Please enter a sentence first!";
-          return;
-        }
+  if (!input) {
+    output.textContent = "Please enter a sentence first!";
+    return;
+  }
 
-        // For now, placeholder response:
-        output.textContent =
-          "→ Processing: \"" +
-          input +
-          "\"\n\n(This is where the AI explanation will appear once connected.)";
-      }
-    </script>
+  output.textContent = "Thinking...";
+
+  try {
+    const response = await fetch("https://first-try-hlti.onrender.com/explain", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sentence: input }),
+    });
+
+    const data = await response.json();
+
+    if (data.explanation) {
+      output.textContent = data.explanation;
+    } else {
+      output.textContent = "Error: " + (data.error || "Something went wrong");
+    }
+  } catch (err) {
+    output.textContent = "Request failed: " + err.message;
+  }
+}
+</script>
+
   </body>
 </html>
