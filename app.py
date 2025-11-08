@@ -19,7 +19,7 @@ def explain():
     # You can refine this prompt later.
     prompt = f"Explain the Estonian grammar in this sentence: {sentence}\nProvide a clear English breakdown for each word."
 
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
     )
